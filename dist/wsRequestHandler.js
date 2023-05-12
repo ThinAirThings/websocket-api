@@ -21,7 +21,7 @@ const wsRequestHandler = (handler) => async (event) => {
     const payload = (typeof event.body === 'object' ? event.body : JSON.parse(event.body));
     const sendMessageToClient = createSendMessageToClient({ apigw_client, connectionId, messageId: payload.messageId });
     try {
-        await handler(sendMessageToClient, payload);
+        await handler({ sendMessageToClient, ...payload });
     }
     catch (_error) {
         const error = _error;
