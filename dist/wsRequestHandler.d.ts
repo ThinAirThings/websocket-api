@@ -6,7 +6,7 @@ declare const createSendMessageToClient: ({ apigw_client, connectionId, messageI
     connectionId: string;
     messageId: string;
 }) => <P extends Record<string, any>>(status: 'RUNNING' | 'ERROR' | 'COMPLETE', payload: P) => Promise<void>;
-export declare const wsRequestHandler: (handler: ({}: {
+export declare const wsRequestHandler: (handler: (payload: {
     [key: string]: any;
     sendMessageToClient: ReturnType<typeof createSendMessageToClient>;
 }) => Promise<void>) => (event: APIGatewayProxyEvent) => Promise<void>;

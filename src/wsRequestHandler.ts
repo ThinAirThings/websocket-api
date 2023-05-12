@@ -30,7 +30,7 @@ const createSendMessageToClient = ({
     await sendMessageToClient(apigw_client, connectionId, messageId, status, payload)
 }
 export const wsRequestHandler = (
-    handler: ({}: {
+    handler: (payload: {
         sendMessageToClient: ReturnType<typeof createSendMessageToClient>,
         [key: string]: any
     })=>Promise<void>
