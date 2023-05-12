@@ -29,17 +29,15 @@ const createSendMessageToClient = ({
 }) => async <P extends Record<string, any>>(status: 'RUNNING'|'ERROR'|'COMPLETE', payload: P) => {
     await sendMessageToClient(apigw_client, connectionId, messageId, status, payload)
 }
-export const wsRequestHandler = <T extends Record<string, any>>(
-    handler: ({
-        sendMessageToClient,
-        ...payload
-    }: T&{
+export const wsRequestHandler = (
+    handler: ({}: {
         sendMessageToClient: ReturnType<typeof createSendMessageToClient>,
+        [key: string]: any
     })=>Promise<void>
 ) => async (event: APIGatewayProxyEvent) => {
     const connectionId = event.requestContext.connectionId!;
     const apigw_client = new ApiGatewayManagementApiClient({endpoint: `https://${event.requestContext.domainName}`})
-    const payload = (typeof event.body === 'object' ? event.body : JSON.parse(event.body)) as T&{messageId: string}
+    const payload = (typeof event.body === 'object' ? event.body : JSON.parse(event.body))
     const sendMessageToClient = createSendMessageToClient({apigw_client, connectionId, messageId: payload.messageId})
     try { 
         await handler({sendMessageToClient, ...payload})
